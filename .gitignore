@@ -1,0 +1,12 @@
+*.log
+\#*
+.\#*
+build
+pkg
+tmp
+eproject.cfg
+.eproject
+*.bundle
+.DS_Store
+*.gem
+*.rbc
