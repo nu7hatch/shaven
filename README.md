@@ -59,10 +59,56 @@ This code produces following html:
     <!DOCTYPE html>
     <html>
     <head>
-      <title rb="title">Hello World!</title>
+      <title>Hello World!</title>
     </head>
     <body>
-      <h1 rb="title">Hello World!</h1>
-      <p rb="description">Yeah, hello beautiful code...</p>
+      <h1>Hello World!</h1>
+      <p>Yeah, hello beautiful code...</p>
     </body>
     </html>
+
+### DOM manipulation
+
+    class ManipulationPresenter < Shaven::Presenter
+      # If you add parameter to the presenter method, original node will
+      # passed to it. Given element is an Nokogiri::XML::Node with some
+      # extra helpers for content manipulation. 
+      def login_link(orig)
+        orig.update!(:method => "delete", :href => logout_path)
+      end
+
+      # You can use extra html helpers to create new dom elements...
+      def home_page_link
+        a(:href => root_path, :class => "home-page-link") { "Go home!" }
+      end
+ 
+      # ... or to replace current.
+      def title
+        tag(:h1, :id => "header") { "This is Sparta! "}.replace!
+      end
+    end
+
+    html = <<-HTML
+    <!DOCTYPE html>
+    <html>
+    <body>
+      <div rb="title">Example title</div>
+      <a href="#" rb="logout_link">Logout!</a>
+      <div id="home_page_link">Home page link will go here...</div>
+    </body>
+    </html>
+    HTML
+
+    ManipulationPresenter.feed(html).to_html
+
+Result:
+
+    <!DOCTYPE html>
+    <html>
+    <body>
+      <h1 id="header">This is Sparta!</h1>
+      <a href="/logout" data-method="delete">Logout!</a>
+      <div id="home_page_link"><a href="/" class="home-page-link">Go Home!</a></div>
+    </body>
+    </html>
+    
