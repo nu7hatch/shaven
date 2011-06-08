@@ -1,64 +1,17 @@
 module Shaven
   module Transformer
-    extend self
+    CHAIN = []
 
-    def transform(node, scope)
-      node.children.each { |child|
-        next unless  child.elem?
-        
-        if child['rb']
-          result, local = transform_node(child, scope) 
-          child.replace(result) unless child.replace_with?(result)
-        end
+    require 'shaven/transformers/base'
+    require 'shaven/transformers/list'
+    require 'shaven/transformers/scopeable'
+    require 'shaven/transformers/replaceable'
+    require 'shaven/transformers/text_or_node'
+    
+    CHAIN.concat([List, Scopeable, Replaceable, TextOrNode])
 
-        transform(child, local ? local : scope)
-      }
-    end
-
-    def transform_node(origin, scope)
-      subst = scope[param = origin.delete('rb').to_s]
-      subst = call_subst(subst, origin) if subst.respond_to?(:call)
-
-      if subst.is_a?(Array)
-        transform_with_array(subst, origin, scope)
-      elsif replaceable?(subst, origin)
-        [subst, nil]
-      elsif scopeable?(subst)
-        [origin, combine_scope(scope, subst)]
-      else
-        [origin.update! { subst }, nil]
-      end
-    end
-
-    def transform_with_array(subst, origin, scope)
-      subst.each { |item|
-        elem = origin.dup
-        array_scope = { origin['rb'].to_s => item }
-        result, cxt = transform_node(elem, combine_scope(scope, array_scope))
-        node = origin.add_previous_sibling(result)
-        transform(node, cxt)
-      }
-      origin.remove
-    end
-
-    def call_subst(subst, *args)
-      arity = subst.respond_to?(:arity) ? subst.arity : args.size
-      args = arity == args.size ? args : [] 
-      subst.call(*args)
-    end
-
-    def scopeable?(subst)
-      subst.is_a?(Hash) or subst.respond_to?(:to_shaven)
-    end
-
-    def replaceable?(subst, origin)
-      subst.is_a?(Nokogiri::XML::Node) and subst.replace_with?(origin)
-    end
-
-    def combine_scope(scope, subst)
-      subst = subst.respond_to?(:to_shaven) ? subst.to_shaven : subst
-      scope = scope.dup
-      scope.unshift(subst.stringify_keys)
+    def self.transform(node, scope)
+      Base.transform_all(node, scope)
     end
   end # Transformer
 end # Shaven
