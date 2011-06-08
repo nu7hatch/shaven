@@ -1,3 +1,5 @@
+require File.dirname(__FILE__) + "/stubs"
+
 class SimpleTestPresenter < Shaven::Presenter
   def leonidas_says
     "This is sparta!!!"
@@ -29,20 +31,7 @@ class HashContextsTestPresenter < Shaven::Presenter
   end
 end
 
-class Spartan
-  attr_reader :name, :title, :motto
-  
-  def initialize(name, title, motto)
-    @name, @title, @motto = name, title, motto
-  end
-
-  def to_shaven
-    { :name => name, :title => title, :motto => motto }
-  end
-end
-
 class ToShavenContextsTestPresenter < Shaven::Presenter
-  
   def leonidas_info
     Spartan.new("Leonidas", "King of Sparta", "This is Sparta!!!")
   end
