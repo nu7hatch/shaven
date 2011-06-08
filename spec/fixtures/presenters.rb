@@ -12,6 +12,12 @@ class ReplacementTestPresenter < Shaven::Presenter
   end
 end
 
+class InsertingTestPresenter < Shaven::Presenter
+  def leonidas_says
+    tag(:strong) { "This is sparta!!!" }
+  end
+end
+
 class UpdatingTestPresenter < Shaven::Presenter
   def leonidas_says(orig)
     orig.update!(:class => "words") { "Sparta!!!" }

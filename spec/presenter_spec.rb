@@ -31,6 +31,11 @@ describe Shaven::Presenter do
         p = make_presenter(ReplacementTestPresenter, 'simple.html')
         p.to_html.should == "<!DOCTYPE html>\n<html><body>\n<h1 id=\"leonidas_words\">This is sparta!!!</h1>\n</body></html>\n"
       end
+      
+      it "inserts given tag within current" do
+        p = make_presenter(InsertingTestPresenter, 'simple.html')
+        p.to_html.should == "<!DOCTYPE html>\n<html><body>\n<div id=\"leonidas\"><strong>This is sparta!!!</strong></div>\n</body></html>\n"
+      end
 
       it "updates original tag when updated" do
         p = make_presenter(UpdatingTestPresenter, 'simple.html')
