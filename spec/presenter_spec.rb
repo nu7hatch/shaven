@@ -39,7 +39,17 @@ describe Shaven::Presenter do
 
       it "properly deals with hash sub-contexts" do
         p = make_presenter(HashContextsTestPresenter, 'contexts.html')
-        p.to_html.should == "<!DOCTYPE html>\n<html><body>\n<h1>Hello world!</h1>\n<div>\n<h2>Leonidas</h2>\n<p>King of Sparta</p>\n<blockquote>This is Sparta!!!</blockquote>\n</div>\n</body></html>\n"
+        p.to_html.should == "<!DOCTYPE html>\n<html><body>\n<h1>Hello world!</h1>\n<div>\n<h2>Leonidas</h2>\n<p>King of Sparta</p>\n<blockquote>This is Sparta!!!</blockquote>\n</div>\n<div>Hello world!</div>\n</body></html>\n"
+      end
+
+      it "properly deals with to_shaven like sub-contexts" do
+        p = make_presenter(ToShavenContextsTestPresenter, 'contexts.html')
+        p.to_html.should == "<!DOCTYPE html>\n<html><body>\n<h1>Hello world!</h1>\n<div>\n<h2>Leonidas</h2>\n<p>King of Sparta</p>\n<blockquote>This is Sparta!!!</blockquote>\n</div>\n<div>Hello world!</div>\n</body></html>\n"
+      end
+
+      it "properly deals with array contexts" do
+        p = make_presenter(SimpleArrayTestPresenter, 'arrays.html')
+        p.to_html.should == "<!DOCTYPE html>\n<html><body>\n<ul>\n<li>yellow</li>\n<li class=\"red\">red</li>\n<li>green</li>\n<li>blue</li>\n</ul>\n</body></html>\n"
       end
     end
   end
