@@ -38,6 +38,27 @@ describe Shaven::Presenter do
     end
   end
 
+  shared_examples_for "tag with ujs extras" do
+    it "properly maps :method attribute to data-method" do
+      a = subject.a(:method => "post") { "Hello!"} 
+      a.to_html.should == '<a data-method="post">Hello!</a>'
+    end
+
+    it "properly maps :remote attribute to data-remote" do
+      a = subject.a(:remote => true) { "Hello!"} 
+      a.to_html.should == '<a data-remote="data-remote">Hello!</a>'
+      a.update! :remote => false
+      a.to_html.should == '<a>Hello!</a>'
+      a = subject.a(:remote => false) { "Hello!"} 
+      a.to_html.should == '<a>Hello!</a>'
+    end
+
+    it "properly maps :confirm attribute to data-confirm" do
+      a = subject.a(:confirm => "Are you sure?") { "Hello!"} 
+      a.to_html.should == '<a data-confirm="Are you sure?">Hello!</a>'
+    end
+  end
+
   describe "#a" do
     it "creates new a element within current doc" do
       a = subject.a(:href => "foo.html") { "Hello!" }
@@ -49,8 +70,6 @@ describe Shaven::Presenter do
       a.to_html.should == '<a>Hello!</a>'
     end
 
-    it "properly maps :method attribute to data-method"
-    it "properly maps :remote attribute to data-remote"
-    it "properly maps :confirm attribute to data-confirm"
+    it_should_behave_like "tag with ujs extras"
   end
 end
