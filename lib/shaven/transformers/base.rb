@@ -4,13 +4,14 @@ module Shaven
       class << self
         def transform_all(node, scope)
           node.children.each { |child|
-            next unless  child.elem?
-            
-            if child.key?('rb') and !child['rb'].empty?
-              result, local = transform_node(child, scope) 
+            next unless child.elem?
+
+            if child.key?('rb')
+              result, local = transform_node(child, scope)
+              # Yeah, it has to be unless here... it's obvious isn't it :)?
               child.replace(result) unless child.replace_with?(result)
             end
-          
+
             transform_all(child, local ? local : scope)
           }
         end
