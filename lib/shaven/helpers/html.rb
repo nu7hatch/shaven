@@ -16,9 +16,6 @@ module Shaven
       def div(attrs={}, &content)
         tag(:div, attrs, &content)
       end
-
-      private
-
     end # HTML
   end # Helpers
 end # Shaven
