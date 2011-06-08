@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + "/spec_helper"
 
 describe Shaven::Presenter do
-  subject { Shaven::Presenter.new(Shaven::Document.new("<html><body></body></html>")) }
+  subject { Shaven::Presenter.feed("<html><body></body></html>") }
 
   describe "#tag" do
     it "creates element within current doc" do
