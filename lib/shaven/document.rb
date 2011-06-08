@@ -1,7 +1,7 @@
 require 'nokogiri'
 
-class Shaven
+module Shaven
   class Document < Nokogiri::HTML::Document
     
-  end
-end
+  end # Document
+end # Shaven
