@@ -1,7 +1,14 @@
 require 'shaven/helpers/html'
+require 'shaven/transformer'
 
 module Shaven
   class Presenter
+    class Scope < Array
+      def [](key)
+        each { |layer| return layer[key] if layer.key?(key) }
+      end
+    end
+
     include Helpers::HTML
 
     class << self
@@ -15,29 +22,11 @@ module Shaven
     end
 
     def to_html
-      fill_in!(@document.root)
+      Transformer.transform(@document.root, Scope.new([self]))
       @document.to_html
     end
 
-    private
-
-    def fill_in!(node)
-      node.children.each { |child|
-        child.replace(fill_in_node(child)) if child['rb']
-        fill_in!(child)
-      }
-    end
-
-    def fill_in_node(node)
-      origin  = Tag.cast(node)
-      entry = method(origin.delete('rb').to_s.to_sym)
-      data  = entry.arity == 1 ? entry.call(origin) : entry.call
-      
-      if data.is_a?(Tag) and (data.replacement? or data === origin)
-        data
-      else
-        origin.update! { data }
-      end
-    end
+    alias_method :key?, :respond_to?
+    alias_method :[], :method
   end # Presenter
 end # Shaven

@@ -36,6 +36,11 @@ describe Shaven::Presenter do
         p = make_presenter(UpdatingTestPresenter, 'simple.html')
         p.to_html.should == "<!DOCTYPE html>\n<html><body>\n<div id=\"leonidas\" class=\"words\">Sparta!!!</div>\n</body></html>\n"
       end
+
+      it "properly deals with hash sub-contexts" do
+        p = make_presenter(HashContextsTestPresenter, 'contexts.html')
+        p.to_html.should == "<!DOCTYPE html>\n<html><body>\n<h1>Hello world!</h1>\n<div>\n<h2>Leonidas</h2>\n<p>King of Sparta</p>\n<blockquote>This is Sparta!!!</blockquote>\n</div>\n</body></html>\n"
+      end
     end
   end
 end
