@@ -1,6 +1,8 @@
 module Shaven
   module Transformer
-    def self.transform(node, scope)
+    extend self
+
+    def transform(node, scope)
       node.children.each { |child|
         next unless  child.elem?
         
@@ -13,7 +15,7 @@ module Shaven
       }
     end
 
-    def self.transform_node(origin, scope)
+    def transform_node(origin, scope)
       subst = scope[param = origin.delete('rb').to_s]
       subst = call_subst(subst, origin) if subst.respond_to?(:call)
 
@@ -28,7 +30,7 @@ module Shaven
       end
     end
 
-    def self.transform_with_array(subst, origin, scope)
+    def transform_with_array(subst, origin, scope)
       subst.each { |item|
         elem = origin.dup
         array_scope = { origin['rb'].to_s => item }
@@ -39,21 +41,21 @@ module Shaven
       origin.remove
     end
 
-    def self.call_subst(subst, *args)
+    def call_subst(subst, *args)
       arity = subst.respond_to?(:arity) ? subst.arity : args.size
       args = arity == args.size ? args : [] 
       subst.call(*args)
     end
 
-    def self.scopeable?(subst)
+    def scopeable?(subst)
       subst.is_a?(Hash) or subst.respond_to?(:to_shaven)
     end
 
-    def self.replaceable?(subst, origin)
+    def replaceable?(subst, origin)
       subst.is_a?(Nokogiri::XML::Node) and subst.replace_with?(origin)
     end
 
-    def self.combine_scope(scope, subst)
+    def combine_scope(scope, subst)
       subst = subst.respond_to?(:to_shaven) ? subst.to_shaven : subst
       scope = scope.dup
       scope.unshift(subst.stringify_keys)
