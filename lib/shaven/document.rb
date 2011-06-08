@@ -1,5 +1,3 @@
-require 'nokogiri'
-
 module Shaven
   class Document < Nokogiri::HTML::Document
     def self.new(thing, encoding=nil, &block)

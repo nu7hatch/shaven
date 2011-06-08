@@ -1,5 +1,4 @@
 require File.dirname(__FILE__) + "/spec_helper"
-require 'shaven/tags'
 
 describe Shaven::Tag do
   let (:doc) { Nokogiri::HTML("<html><body></body></html>") }

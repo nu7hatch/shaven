@@ -2,7 +2,7 @@ module Shaven
   module Helpers
     module HTML
       def tag(tag, attrs={}, &content)
-        Shaven::Tag.new(tag, attrs, content, @document)
+        Shaven::Tag.new(tag, attrs.stringify_keys, content, @document)
       end
 
       def a(attrs={}, &label)
