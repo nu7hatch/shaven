@@ -94,7 +94,7 @@ This code produces following html:
     <body>
       <div rb="title">Example title</div>
       <a href="#" rb="logout_link">Logout!</a>
-      <div id="home_page_link">Home page link will go here...</div>
+      <div rb="home_page_link">Home page link will go here...</div>
     </body>
     </html>
     HTML
@@ -108,7 +108,76 @@ Result:
     <body>
       <h1 id="header">This is Sparta!</h1>
       <a href="/logout" data-method="delete">Logout!</a>
-      <div id="home_page_link"><a href="/" class="home-page-link">Go Home!</a></div>
+      <div><a href="/" class="home-page-link">Go Home!</a></div>
     </body>
     </html>
     
+### Hash scopes and lists
+
+Now, the true power of Shaven. Suport for lists and scopes.
+
+    class ComplexPresenter < Shaven::Presenter
+      # As scopes are treaded all hashes and objects responding to `#to_shaven`
+      # method (which returns hash with attributes).
+      def user
+        { :name => "John Doe",
+          :email => "john@doe.com",
+        }
+      end
+
+      def users_list
+        [ { :name => tag(:strong) { "Emmet Brown" }, :email => "emmet@brown.com"},
+          { :name => proc { |orig| orig.update!(:class => "marty") { "Marty Macfly" }, :email => "marty@macfly.com" },
+          { :name => "Biff Tannen", :email => "biff@tannen.com" }
+        ]
+      end
+    end
+
+    html = <<-HTML
+    <!DOCTYPE html>
+    <html>
+    <body>
+      <h1>Single user here!</h1>
+      <div rb="user">
+        <h2 rb="name">Sample name</h2>
+        <p rb="email">sapmle@email.com</p>
+      </div>
+      <h1>More users</h1>
+      <ul id="users">
+        <li rb="users_list">
+          <span rb="name">Sample name</span>
+          <span rb="email">sample@email.com</span>
+        <li>
+      </ul>
+    </body>
+    </html>
+    HTML
+
+And the awesome result is:
+
+    <!DOCTYPE html>
+    <html>
+    <body>
+      <h1>Single user here!</h1>
+      <div rb="user">
+        <h2>Adam Smith</h2>
+        <p>adam@smith.com</p>
+      </div>
+      <h1>More users</h1>
+      <ul id="users">
+        <li>
+          <span><strong>Emmet Brown</strong></span>
+          <span>brown@brown.com</span>
+        <li>
+        <li class="marty">
+          <span>Marty Macfly</span>
+          <span>marty@macfly.com</span>
+        <li>
+        <li>
+          <span>Biff Tannen</span>
+          <span>biff@tannen.com</span>
+        <li>
+      </ul>
+    </body>
+    </html>
+
