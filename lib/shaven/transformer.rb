@@ -31,9 +31,10 @@ module Shaven
     def self.transform_with_array(subst, origin, scope)
       subst.each { |item|
         elem = origin.dup
-        subscope = { origin['rb'].to_s => item }
-        result, cxt = transform_node(elem, combine_scope(scope, subscope))
-        origin.add_previous_sibling(result)
+        array_scope = { origin['rb'].to_s => item }
+        result, cxt = transform_node(elem, combine_scope(scope, array_scope))
+        node = origin.add_previous_sibling(result)
+        transform(node, cxt)
       }
       origin.remove
     end

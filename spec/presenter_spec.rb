@@ -51,6 +51,11 @@ describe Shaven::Presenter do
         p = make_presenter(SimpleArrayTestPresenter, 'arrays.html')
         p.to_html.should == "<!DOCTYPE html>\n<html><body>\n<ul>\n<li>yellow</li>\n<li class=\"red\">red</li>\n<li>green</li>\n<li>blue</li>\n</ul>\n</body></html>\n"
       end
+      
+      it "properly deals with complex array/hash contexts" do
+        p = make_presenter(ComplexArrayTestPresenter, 'complex.html')
+        p.to_html.should == "<!DOCTYPE html>\n<html><body>\n<ul>\n<h2>Dilios</h2>\n<p>Soldier</p>\n<blockquote>Foobar</blockquote>\n</ul>\n<ul>\n<h2>Theron</h2>\n<p>Soldier</p>\n<blockquote>Bla</blockquote>\n</ul>\n<ul>\n<h2>Daxos</h2>\n<p>Soldier</p>\n<blockquote>Fooo</blockquote>\n</ul>\n<ul>\n<h2>Leonidas</h2>\n<p>King</p>\n<blockquote>This is Sparta!!!</blockquote>\n</ul>\n</body></html>\n"
+      end
     end
   end
 end
