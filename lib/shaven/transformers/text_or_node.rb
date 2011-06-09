@@ -8,7 +8,13 @@ module Shaven
       end
 
       def transform!
-        @result = node.update! { subst_value }
+        if subst_value.is_a?(Nokogiri::XML::Node)
+          node.inner_html = subst_value
+        else
+          node.content = subst_value.to_s
+        end
+
+        @result = node
       end
     end # TextOrNode
   end # Transformer

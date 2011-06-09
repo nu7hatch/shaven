@@ -21,9 +21,11 @@ module Shaven
       # Returns normalized item name, extended with scopes' names chain.  
       def normalized_name
         @normalized_name ||= begin
-          parts = scope.chain.dup.map { |x| x.singularize }
-          parts.push(subst.shaven_item? ? subst.id : subst_name)
-          parts.join("_")
+          # XXX: Optimize!
+          #parts = scope.chain.map { |x| x.singularize }
+          #parts.push(subst.shaven_item? ? subst.id : subst_name)
+          #parts.join("_")
+          subst_name#subst.shaven_item? ? subst.id : subst_name
         end
       end
 
@@ -44,10 +46,9 @@ module Shaven
 
       # Helper for generating value from substitution object if this one
       # is callable. 
-      def subst_call(subst, *args)
+      def subst_call(subst, node)
         if subst.respond_to?(:call)
-          arity = subst.respond_to?(:arity) ? subst.arity : args.size
-          args = arity == args.size ? args : [] 
+          args = subst.arity == 1 ? [node] : [] 
           subst.call(*args).to_shaven
         else
           subst

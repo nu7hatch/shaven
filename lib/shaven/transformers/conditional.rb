@@ -14,15 +14,15 @@ module Shaven
       end
 
       def not?
-        subst_name =~ MATCHING_NOT
+        @not ||= !!(subst_name =~ MATCHING_NOT)
       end
 
       def subst
-        @subst = scope[subst_name.gsub(MATCHING_NOT, '\\1')]
+        @subst ||= scope[subst_name.gsub(MATCHING_NOT, '\\1')]
       end
 
       def normalize!
-        node.update!(:id => false)
+        node.delete('id')
       end
       
       def transform!

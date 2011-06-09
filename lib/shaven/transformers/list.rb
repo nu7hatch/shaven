@@ -1,4 +1,5 @@
 require 'shaven/transformers/content'
+
 module Shaven
   module Transformer
     class List < Content
@@ -25,14 +26,20 @@ module Shaven
 
       def transform!
         index = 0
+        array_scope_swap = { subst_name => nil }
+        array_scope = combine_scope(scope, array_scope_swap)
 
         subst_value.each { |item|
-          item = item.to_shaven_item(index+=1, default_indexer)
-          array_scope = combine_scope(scope, { subst_name => item })
+          # XXX: optimize
+          #item = item.to_shaven_item(index+=1, default_indexer)
+          array_scope_swap[subst_name] = item
           new_node = node.dup
           
           if transformer = self.class.transform_node(new_node, array_scope)
-            new_node = node.add_previous_sibling(transformer.result) if transformer.result
+            if result = transformer.result
+              new_node = node.add_previous_sibling(result)
+            end
+
             self.class.transform_children(new_node, transformer.scope)
           end
         }

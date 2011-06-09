@@ -8,7 +8,7 @@ module Shaven
         # context scope. 
         def transform_children(node, scope)
           node.children.each { |child|
-            next unless child.elem?
+            next unless child.elem? 
             transformer = transform_node(child, scope)
             transform_children(child, transformer ? transformer.scope : scope)
           }
