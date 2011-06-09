@@ -9,8 +9,9 @@ module Shaven
     require 'shaven/transformers/scopeable'
     require 'shaven/transformers/replaceable'
     require 'shaven/transformers/text_or_node'
+    require 'shaven/transformers/conditional'
     
-    CHAIN.concat([List, Scopeable, Replaceable, TextOrNode])
+    CHAIN.concat([Conditional, List, Scopeable, Replaceable, TextOrNode])
 
     # Syntactic sugar for <tt>Shaven::Transformer::Base.transform_children</tt>.
     # Check it out for more details. 

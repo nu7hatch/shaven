@@ -62,3 +62,9 @@ class ComplexArrayTestPresenter < Shaven::Presenter
     ]
   end
 end
+
+class ConditionalsTestPresenter < Shaven::Presenter
+  def logged_in?
+    false
+  end
+end

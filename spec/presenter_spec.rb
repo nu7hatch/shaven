@@ -61,6 +61,11 @@ describe Shaven::Presenter do
         p = make_presenter(ComplexArrayTestPresenter, 'complex.html')
         p.to_html.should == "<!DOCTYPE html>\n<html><body>\n<ul id=\"spartans\">\n<li id=\"spartan_1\">\n<h2 id=\"spartan_name\">Dilios</h2>\n<p id=\"spartan_title\">Soldier</p>\n<blockquote id=\"spartan_motto\">Foobar</blockquote>\n</li>\n<li id=\"spartan_2\">\n<h2 id=\"spartan_name\">Theron</h2>\n<p id=\"spartan_title\">Soldier</p>\n<blockquote id=\"spartan_motto\">Bla</blockquote>\n</li>\n<li id=\"spartan_3\">\n<h2 id=\"spartan_name\">Daxos</h2>\n<p id=\"spartan_title\">Soldier</p>\n<blockquote id=\"spartan_motto\">Fooo</blockquote>\n</li>\n<li id=\"spartan_4\">\n<h2 id=\"spartan_name\">Leonidas</h2>\n<p id=\"spartan_title\">King</p>\n<blockquote id=\"spartan_motto\">This is Sparta!!!</blockquote>\n</li>\n</ul>\n</body></html>\n"
       end
+
+      it "properly deals with conditionals" do
+        p = make_presenter(ConditionalsTestPresenter, 'conditionals.html')
+        p.to_html.should == "<!DOCTYPE html>\n<html><body>\n\n<div>Yeah, you're not logged in!</div>\n</body></html>\n"
+      end
     end
   end
 end

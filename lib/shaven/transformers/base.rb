@@ -50,25 +50,25 @@ module Shaven
 
       # This method should contain transformation conditions. 
       def can_be_transformed?
-        rails NotImplementedError, "You have to implement #can_be_transformed? in your transformer"
+        raise NotImplementedError, "You have to implement #can_be_transformed? in your transformer"
       end
 
       # This method tells if transformer allows to continue transfromations with
       # next transfromers left in chain.
       def allow_continue?
-        rails NotImplementedError, "You have to implement #allow_continue? in your transformer"
+        raise NotImplementedError, "You have to implement #allow_continue? in your transformer"
       end
       
       # This method should contain all transformation directives. Remember to store +result+
       # and eventually modified +scope+ for children here. 
       def transform!
-        rails NotImplementedError, "You have to implement #transform! in your transformer"
+        raise NotImplementedError, "You have to implement #transform! in your transformer"
       end
       
       # Normalization is executed before transformation and cleans up shaven directives from
       # transformated node.
       def normalize!
-        rails NotImplementedError, "You have to implement #normalize! in your transformer"
+        raise NotImplementedError, "You have to implement #normalize! in your transformer"
       end
 
       # Set it to +false+ when auto normalization should be disabled within you transformer. 
