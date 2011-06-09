@@ -1,6 +1,7 @@
 # -*- ruby -*-
 
 gem "nokogiri"
+gem "activesupport"
 
 env :development, :test do
   gem "rspec", "~> 2.5"

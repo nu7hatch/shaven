@@ -1,8 +1,7 @@
 require "nokogiri"
-
 require 'shaven/core_ext/hash'
-require 'shaven/tag'
-require 'shaven/document'
+require 'shaven/core_ext/object'
+require 'shaven/nokogiri_ext/node'
 require 'shaven/presenter'
 
 module Shaven

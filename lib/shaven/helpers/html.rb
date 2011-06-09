@@ -1,3 +1,5 @@
+require 'shaven/tag'
+
 module Shaven
   module Helpers
     module HTML
