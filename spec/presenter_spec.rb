@@ -66,6 +66,11 @@ describe Shaven::Presenter do
         p = make_presenter(ConditionalsTestPresenter, 'conditionals.html')
         p.to_html.should == "<!DOCTYPE html>\n<html><body>\n\n<div>Yeah, you're not logged in!</div>\n</body></html>\n"
       end
+
+      it "properly deals with dummy nodes" do
+        p = make_presenter(Shaven::Presenter, 'dummies.html')
+        p.to_html.should == "<!DOCTYPE html>\n<html><body>\n\n\n<div>Hello</div>\n</body></html>\n"
+      end
     end
   end
 end
