@@ -10,37 +10,29 @@ module Shaven
   #   scope["foo"] # => "Foobar!"
   #
   class Scope < Array
+    attr_reader :node
+
+    def initialize(base)
+      super([base])
+    end
+
     def [](key)
-      each { |context|
-        return context[key.to_s] if context.key?(key.to_s)
+      each { |scope|
+        if scope.key?(key = key.to_s) 
+          value = scope[key]
+          
+          if value.is_a?(Proc) or value.is_a?(Method)
+            return value.call(*(value.arity == 1 ? [node] : []))
+          else
+            return value
+          end
+        end
       }
     end
 
-    def value_for(key, node)
-      value = self[key]
-
-      if value.respond_to?(:call)
-        args = value.arity == 1 ? [node] : []
-        value.call(*args)
-      else
-        value
-      end
-    end
-
-    def unshift(scope, name=nil)
-      chain << name if name
-      super(scope)
-    end
-
-    # Returns scope names chain.
-    def chain
-      @chain ||= []
-    end
-
-    def dup
-      new_scope = super
-      new_scope.instance_variable_set("@chain", chain.dup)
-      new_scope
+    def with(node)
+      @node = node
+      return self
     end
   end # Scope
 end # Shaven

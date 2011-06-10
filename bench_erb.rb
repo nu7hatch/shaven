@@ -142,7 +142,7 @@ class MyPresenter < Shaven::Presenter
     $items
   end
 
-  def condition(orig)
+  def condition
     false
   end
 
@@ -190,4 +190,3 @@ Benchmark.bm do |x|
   x.report("ERB     ") { n.times { render_erb } }
   x.report("HAML    ") { n.times { render_haml } }
 end
-

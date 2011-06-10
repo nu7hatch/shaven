@@ -1,4 +1,3 @@
-# -*- coding: undecided -*-
 require 'shaven/helpers/html'
 require 'shaven/scope'
 require 'shaven/document'
@@ -26,24 +25,20 @@ module Shaven
       @document = document
     end
 
-    module Transformers
+    module Transformer
       class Base
-        def self.needs_value?
-          true
-        end
-
         def self.can_be_transformed?(value)
           true
         end
 
-        def self.find_value(key, node, scope)
-          scope.value_for(key, node)
+        def self.find_value(scope, key)
+          scope[key]
         end
 
         attr_reader :node, :name, :value, :scope
         
-        def initialize(node, name, value, scope)
-          @node, @name, @value, @scope = node, name, value, scope
+        def initialize(name, value, scope)
+          @node, @name, @value, @scope = scope.node, name, value, scope
         end
         
         def can_continue?
@@ -51,17 +46,18 @@ module Shaven
         end
 
         def transform!
+          nil
         end
       end
 
       class Auto < Base
-        def self.new(node, name, value, scope)
+        def self.new(name, value, scope)
           if value.is_a?(::Array)
-            List.new(node, name, value, scope)
+            List.new(name, value, scope)
           elsif value.is_a?(::Hash)
-            Hash.new(node, name, value, scope)
+            Hash.new(name, value, scope)
           else
-            TextOrNode.new(node, name, value, scope)
+            TextOrNode.new(name, value, scope)
           end
         end
       end
@@ -73,6 +69,7 @@ module Shaven
 
         def transform!
           node.remove unless value
+          nil
         end
       end
 
@@ -83,6 +80,7 @@ module Shaven
 
         def transform!
           node.remove if value
+          nil
         end
       end
 
@@ -92,7 +90,7 @@ module Shaven
         end
 
         def transform!
-          @scope = scope.dup.unshift(value.stringify_keys)
+          value.stringify_keys
         end
       end
 
@@ -109,14 +107,16 @@ module Shaven
           value.each { |item|
             new_node = node.dup
             array_scope["__shaven_list_item_#{id}"] = item
-            new_node['rb:with'] = "__shaven_list_item_#{id}"
+            new_node['rb'] = "__shaven_list_item_#{id}"
             parent.add_child(new_node)
             id += 1
           }
 
           node.remove
           array_scope = scope.dup.unshift(array_scope)
-          Shaven::Presenter.transform(parent, array_scope)
+          Transformer.run!(array_scope.with(parent))
+          
+          nil
         end
       end
 
@@ -127,75 +127,58 @@ module Shaven
           else
             node.content = value.to_s
           end
+
+          nil
         end
       end
 
       class Translation < Base
+        def self.find_value(scope, key)
+          nil
+        end
+
         def self.needs_value?
           false
         end
       end
-    end
 
-    class Directive
-      DIRECTIVES = [
-        ['rb:if',     Transformers::Condition],
-        ['rb:unless', Transformers::ReverseCondition],
-        ['rb:t',      Transformers::Translation],
-        ['rb:with',   Transformers::Hash],
-        ['rb:each',   Transformers::List],
-        ['rb',        Transformers::Auto]
+      CALLERS = [
+        ['rb:if',     Condition],
+        ['rb:unless', ReverseCondition],
+        ['rb:t',      Translation],
+        ['rb',        Auto]
       ]
 
-      def self.map(node, scope, &block)
-        DIRECTIVES.map { |(name,trans)|
-          if key = node[name] and !key.empty?
-            value = trans.needs_value? ? trans.find_value(key, node, scope) : nil
-            directive = new(key, value, trans)
-            node.delete(name)
-            yield directive
+      def self.run_each(scope, &block)
+        CALLERS.each { |(name,trans)|
+          if key = scope.node.delete(name)
+            value = trans.find_value(scope, key)
+
+            if trans.can_be_transformed?(value)
+              transformer = trans.new(key, value, scope)
+              extra_scope = transformer.transform!
+              return extra_scope unless transformer.can_continue?
+            end
+          end
+        }
+
+        nil
+      end
+
+      def self.run!(scope)
+        scope.node.children.each { |child|
+          if child.elem?
+            extra_scope = run_each(scope.with(child))
+            scope.unshift(extra_scope) if extra_scope
+            run!(scope)
+            scope.shift if extra_scope
           end
         }
       end
-
-      attr_reader :key
-      attr_reader :value
-      attr_reader :transformer
-
-      def initialize(key, value, transformer)
-        @key, @value, @transformer = key, value, transformer
-      end
-      
-      def execute(node, scope)
-        if @transformer.can_be_transformed?(value)
-          exec = @transformer.new(node, key, value, scope)
-          exec.transform!
-          return exec
-        end
-      end
-    end
-
-    def self.transform(node, scope)
-      node.children.each { |child|
-        if child.elem?
-          local_scope = nil
-          
-          Directive.map(child, scope) { |directive|
-            if exec = directive.execute(child, scope)
-              local_scope = exec.scope
-              break unless exec.can_continue?
-            end
-          }
-          
-          transform(child, local_scope ? local_scope : scope)
-        end
-      }
     end
 
     def to_html
-      #Transformer.transform(@document.root, Scope.new([self]))
-      scope = Scope.new([self])
-      self.class.transform(@document.root, scope)
+      Transformer.run!(Scope.new(self).with(@document.root))
       @document.to_html
     end
 
