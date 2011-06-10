@@ -11,7 +11,20 @@ module Shaven
   #
   class Scope < Array
     def [](key)
-      each { |layer| return layer[key.to_s] if layer.key?(key.to_s) }
+      each { |context|
+        return context[key.to_s] if context.key?(key.to_s)
+      }
+    end
+
+    def value_for(key, node)
+      value = self[key]
+
+      if value.respond_to?(:call)
+        args = value.arity == 1 ? [node] : []
+        value.call(*args)
+      else
+        value
+      end
     end
 
     def unshift(scope, name=nil)
