@@ -182,8 +182,6 @@ end
 
 n = 2000
 
-puts render_shaven
-
 Benchmark.bm do |x|
   x.report("Shaven  ") { n.times { render_shaven } }
   x.report("Mustache") { n.times { render_mustache } }

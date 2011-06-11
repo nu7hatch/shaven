@@ -1,79 +1,52 @@
 module Shaven
   module Transformer
-    # Base class for all transformers. All custom transformers should follow this structure.
-    # Check out Shaven's built in transformes to get know what's going on. 
+    # Base class for all transformers. All custom transformers should follow this 
+    # structure. Check out Shaven's built in transformes to get know what's going on. 
     class Base
+      # Name of the presenters method/key from which value has been extracted.
+      attr_reader :name
+      # Value extracted from presenter. 
+      attr_reader :value
+      # Transformation context scope.
+      attr_reader :scope
+
       class << self
-        # Applies transformations to all children of given node, within specified
-        # context scope. 
-        def transform_children(node, scope)
-          node.children.each { |child|
-            next unless child.elem? 
-            transformer = transform_node(child, scope)
-            transform_children(child, transformer ? transformer.scope : scope)
-          }
+        # This method contains set of conditions which tells if given value can be 
+        # used to transformation on current node. Each transformer should override
+        # this method if has such extra requirements. 
+        def can_be_transformed?(value)
+          true
         end
 
-        # Applies transformations to single node within given scope. If any transformation
-        # could be performed then returns transformer object, otherwise +nil+ will be returned.
-        def transform_node(origin, scope)
-          CHAIN.each { |klass|
-            transformer = klass.new(origin, scope) 
-            
-            if transformer.can_be_transformed?
-              transformer.normalize! if transformer.auto_normalize?
-              transformer.transform!
-              
-              if result = transformer.result and !origin.replace_with?(result)
-                # Yeah, it has to be unless here... it's obvious isn't it :)?
-                origin.replace(result)
-              end
-
-              return transformer unless transformer.allow_continue?
-            end
-          }
-
-          nil
+        # Transformers can load values from scope in differen ways, so this method
+        # allows to define such own way within each trasformer. By default it just
+        # picks up specified key from given scope. 
+        def find_value(scope, key)
+          scope[key]
         end
       end # self
 
-      # Original node to apply tranformations on it.
-      attr_reader :node
-      # Transformation context scope. 
-      attr_reader :scope
-      # Transformation result. 
-      attr_reader :result
-
-      def initialize(node, scope)
-        @node, @scope, @result = node, scope, nil
+      def initialize(name, value, scope)
+        @name, @value, @scope = name, value, scope
       end
 
-      # This method should contain transformation conditions. 
-      def can_be_transformed?
-        raise NotImplementedError, "You have to implement #can_be_transformed? in your transformer"
+      # Just shortcut for <tt>scope.node</tt>.
+      def node
+        scope.node
       end
 
-      # This method tells if transformer allows to continue transfromations with
-      # next transfromers left in chain.
+      # If this method returns +true+ then transformers left in chain gonna be applied 
+      # to node within current scope, otherwise transformation chain will be broken.
+      # By default continuing after one transformation is not allowed.
       def allow_continue?
-        raise NotImplementedError, "You have to implement #allow_continue? in your transformer"
+        false
       end
       
-      # This method should contain all transformation directives. Remember to store +result+
-      # and eventually modified +scope+ for children here. 
+      # This method should contain all transformation directives. If scope for children
+      # nodes should be modified then method should return extra hash/scope which will
+      # be temporary combined with current one, otherwise returns +nil+. 
       def transform!
         raise NotImplementedError, "You have to implement #transform! in your transformer"
-      end
-      
-      # Normalization is executed before transformation and cleans up shaven directives from
-      # transformated node.
-      def normalize!
-        raise NotImplementedError, "You have to implement #normalize! in your transformer"
-      end
-
-      # Set it to +false+ when auto normalization should be disabled within you transformer. 
-      def auto_normalize?
-        true
       end
     end # Base
   end # Transformer

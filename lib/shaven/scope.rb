@@ -3,17 +3,19 @@ module Shaven
   #
   # ==== Example
   #
-  #   scope = Scope.new
+  #   scope = Scope.new({:foo => nil})
+  #   scope["foo"] # => nil
   #   scope.unshift({"foo" => "Bar!", "spam" => "Eggs!"})
   #   scope["foo"] # => "Bar!"
   #   scope.unshift({"foo" => "Foobar!"})
   #   scope["foo"] # => "Foobar!"
   #
   class Scope < Array
+    # DOM node wrapped by this scope. 
     attr_reader :node
 
-    def initialize(base)
-      super([base])
+    def initialize(*args)
+      super(args)
     end
 
     def [](key)
@@ -30,6 +32,15 @@ module Shaven
       }
     end
 
+    # Assigns given DOM node to this context and returns itself. This method will
+    # be used to fast switch from one node into another while transformation process.
+    #
+    # ==== Example
+    #
+    #   node_scope = scope.with(node)
+    #   node_scope.unshift({"foo" => proc { |node| node.update! :id => "hello-node" }})
+    #   node_scope["foo"] # => node
+    #
     def with(node)
       @node = node
       return self

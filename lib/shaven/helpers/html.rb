@@ -1,10 +1,10 @@
-require 'shaven/tag'
+require 'shaven/node'
 
 module Shaven
   module Helpers
     module HTML
       def tag(tag, attrs={}, &content)
-        Shaven::Tag.new(tag, attrs.stringify_keys, content, @document)
+        Node.new(tag, attrs, content, @document)
       end
 
       def a(attrs={}, &label)

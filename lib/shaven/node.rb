@@ -1,5 +1,5 @@
 module Shaven
-  class Tag < Nokogiri::XML::Node
+  class Node < Nokogiri::XML::Node
     class << self
       alias_method :orig_new, :new
 
@@ -8,5 +8,5 @@ module Shaven
         node.update!(attrs, content.respond_to?(:call) ? content.call : content)
       end
     end # self
-  end # Tag
+  end # Node
 end # Shaven

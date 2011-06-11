@@ -1,5 +1,6 @@
 module Shaven
   module CoreExt
+    # Contains helpers for keys stringifying. Implementation borrowed from activesupport. 
     module Hash
       def stringify_keys
         inject({}) { |options, (key, value)|

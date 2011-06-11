@@ -1,50 +1,50 @@
-require 'shaven/transformers/content'
-
 module Shaven
   module Transformer
-    class List < Content
-      def can_be_transformed?
-        # Can be applied with arrays. 
-        super && subst_value.is_a?(Array)
-      end
-
-      def allow_continue?
-        false
-      end
-
-      # Default indexer is an lambda which generates sequentional dom id's for
-      # each list elements. Such indexers can be supplied by substitution objects
-      # as well.
-      def default_indexer
-        lambda { |item, id| return "#{normalized_name.singularize}_#{id}" }
-      end
-
-      def auto_normalize?
-        # We don't need normalization on that level...
-        false
+    # This transformer can be applied when value can be iterated (responds to <tt>#each</tt>).
+    # It treats given node as template so generates sequence of clones for each list value, 
+    # and finally removes original node.
+    #
+    # ==== Example
+    #
+    #   <ul id="users">
+    #     <li rb="users">John Doe</li>
+    #   </ul>
+    #
+    # applied with given value:
+    #
+    #   ["Emmet Brown", "Marty Macfly", "Biff Tannen"]
+    #
+    # ... generates:
+    #
+    #   <ul id="users">
+    #     <li>Emmet Brown</li>
+    #     <li>Marty Macfly</li>
+    #     <li>Biff Tannen</li>
+    #   </ul>
+    #
+    class List < Base
+      def self.can_be_transformed?(value)
+        value.respond_to?(:each)
       end
 
       def transform!
-        index = 0
-        array_scope_swap = { subst_name => nil }
-        array_scope = combine_scope(scope, array_scope_swap)
+        array_scope = {}
+        parent = node.parent
+        id = 0
 
-        subst_value.each { |item|
-          # XXX: optimize
-          #item = item.to_shaven_item(index+=1, default_indexer)
-          array_scope_swap[subst_name] = item
+        value.each { |item|
           new_node = node.dup
-          
-          if transformer = self.class.transform_node(new_node, array_scope)
-            if result = transformer.result
-              new_node = node.add_previous_sibling(result)
-            end
-
-            self.class.transform_children(new_node, transformer.scope)
-          end
+          array_scope["__shaven_list_item_#{id}"] = item
+          new_node['rb'] = "__shaven_list_item_#{id}"
+          parent.add_child(new_node)
+          id += 1
         }
 
         node.remove
+        array_scope = scope.dup.unshift(array_scope)
+        Transformer.apply!(array_scope.with(parent))
+        
+        nil
       end
     end # List
   end # Transformer
