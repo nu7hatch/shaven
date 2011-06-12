@@ -4,16 +4,20 @@ module Shaven
       # List of extra <tt>data-*</tt> attributes for dealing with unobtrusive javascript
       # stuff. Following attributes will be converted to html compilant attrs. The <tt>true</tt>
       # and <tt>false</tt> values here means if attribute is boolean or not.
-      UJS_DATA_ATTRIBUTES = { 'remote' => true, 'confirm' => false, 'method' => false }
+      UJS_DATA_ATTRIBUTES = { 
+        'remote'  => true, 
+        'confirm' => false, 
+        'method'  => false 
+      }
 
       # Helper for easy updating node's attributes and content. 
       #
       # ==== Example
       #   
-      #   node.update(:id => "hello-world").to_html # => <div id="hello-world"></div>
-      #   node.update(nil, "Foo!").to_html          # => <div id="hello-world">Foo!</div>
-      #   node.update { "Foobar!" }                 # => <div id="hello-world">Foobar!</div>
-      #   node.update(:id => false)                 # => <div>Foobar!</div>
+      #   node.update!(:id => "hello-world").to_html # => <div id="hello-world"></div>
+      #   node.update!(nil, "Foo!").to_html          # => <div id="hello-world">Foo!</div>
+      #   node.update! { "Foobar!" }                 # => <div id="hello-world">Foobar!</div>
+      #   node.update!(:id => false)                 # => <div>Foobar!</div>
       #
       def update!(attrs={}, content=nil, &block)
         attrs = {} unless attrs
@@ -40,21 +44,18 @@ module Shaven
         return self
       end
 
-      # Sets replacement status to true. It means currently transformed node will be replaced
-      # with this one. 
-      def replace!
-        @replacement = true
+      # Helper for replacing current node with other text or node. 
+      #
+      # ==== Example
+      #
+      #   node.replace!(other_node)
+      #   node.replace!("Text")
+      #   node.replace! { "Something new" }
+      #
+      def replace!(text_or_node, &block)
+        text_or_node = block.call if block_given?
+        replace(text_or_node)
         return self
-      end
-
-      # Returns +true+ when replacement status is on. 
-      def replacement?
-        !!@replacement
-      end
-
-      # Returns +true+ when replacement status if on or given tag equals represented one. 
-      def replace_with?(origin)
-        replacement? or origin === self
       end
 
       private
