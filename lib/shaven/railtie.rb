@@ -5,6 +5,10 @@ require 'shaven'
 module Shaven
   module Rails
     module Presenter
+      def partial(name)
+        @_view.render :partial => name
+      end      
+
       def method_missing(method, *args, &block)
         if respond_to?(method)
           @_view.send(method, *args, &block)
@@ -46,17 +50,14 @@ module Shaven
 
       def presenter_class_for_template(template)
         const_name = (template.virtual_path.to_s+"_presenter").camelize
-        defined?(const_name) ? const_name.constantize : Shaven::Presenter
+        const_name.constantize rescue Shaven::Presenter
       end
     end # TemplateHandler
   end # Rails
 
-  class Presenter
-    include Rails::Presenter
-  end # Presenter
-
   class Railtie < ::Rails::Railtie
     initializer "shaven.configure_rails_initialization" do |app|
+      Shaven::Presenter.send :include, Shaven::Rails::Presenter
       ActiveSupport::Dependencies.autoload_paths << ::Rails.root.join('app/presenters')
       ActionView::Template.register_template_handler(:html, Shaven::Rails::TemplateHandler)
     end

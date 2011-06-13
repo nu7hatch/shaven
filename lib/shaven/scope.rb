@@ -25,7 +25,7 @@ module Shaven
           
           if value.is_a?(Proc) or value.is_a?(Method)
             args = [node, self]
-            return value.call(*args.take(value.arity))
+            return value.call(*args.take(value.arity > 0 ? value.arity : 0))
           else
             return value
           end

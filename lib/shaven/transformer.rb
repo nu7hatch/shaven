@@ -5,6 +5,7 @@ module Shaven
     require "shaven/transformers/condition"
     require "shaven/transformers/reverse_condition"
     require "shaven/transformers/text_or_node"
+    require "shaven/transformers/partial"
     require "shaven/transformers/context"
     require "shaven/transformers/list"
     require "shaven/transformers/auto"
@@ -14,10 +15,11 @@ module Shaven
     # important because some of them allow to keep going with other transformations 
     # after they are applied, other doesn't allow that. 
     CALLERS = [
-      ['dummy',  Dummy],
-      ['if',     Condition],
-      ['unless', ReverseCondition],
-      [nil,      Auto]
+      ['dummy',   Dummy],
+      ['if',      Condition],
+      ['unless',  ReverseCondition],
+      ['partial', Partial],
+      [nil,       Auto]
     ]
 
     # Returns list of callers with full names. Names are combined with configuration
