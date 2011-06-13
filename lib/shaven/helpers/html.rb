@@ -14,7 +14,7 @@ module Shaven
       #   <p class="description">Lorem ipsum dolor...</p>
       #
       def tag(tag, attrs={}, &content)
-        node = Nokogiri::XML::Node.new(name.to_s, @document)
+        node = Nokogiri::XML::Node.new(tag.to_s, @document)
         node.update!(attrs, &content)
       end
 

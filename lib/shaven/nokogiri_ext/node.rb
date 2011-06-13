@@ -52,10 +52,18 @@ module Shaven
       #   node.replace!("Text")
       #   node.replace! { "Something new" }
       #
-      def replace!(text_or_node, &block)
+      # XXX: replace/replace_node method failed with segfault so this is some workaround...
+      #
+      def replace!(text_or_node=nil, &block)
         text_or_node = block.call if block_given?
-        replace(text_or_node)
-        return self
+        
+        unless text_or_node.nokogiri_node?
+          content, text_or_node = text_or_node.to_s, Nokogiri::XML::Text.new("dummy", document)
+          text_or_node.content = content
+        end
+        
+        node = add_previous_sibling(text_or_node)
+        remove
       end
 
       private
