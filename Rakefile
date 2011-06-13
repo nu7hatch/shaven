@@ -40,3 +40,8 @@ task :console do
   ARGV.clear
   IRB.start
 end
+
+desc "Run benchmarks to compare Shaven's speed with other templating systems."
+task :benchmark do
+  require File.dirname(__FILE__) + "/spec/benchmarks"
+end

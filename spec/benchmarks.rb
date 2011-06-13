@@ -1,9 +1,18 @@
+$LOAD_PATH.unshift(File.expand_path("../lib", __FILE__))
+
+require 'benchmark'
+
+require 'shaven'
+require 'erb'
+require 'haml'
+require 'mustache'
+
 $erb = <<-HTML
 <!DOCTYPE html>
 <html>
-  <head>
-    <title><%= @title %></div>
-  </head>
+<head>
+  <title><%= @title %></div>
+</head>
 <body>
   <% if @condition %>
     Something conditional!
@@ -31,9 +40,9 @@ HTML
 $mustache = <<-HTML
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>{{title}}</div>
-  </head>
+<head>
+  <title>{{title}}</div>
+</head>
 <body>
   {{#condition}}
     Something conditional!
@@ -84,9 +93,9 @@ HAML
 $doc = <<-HTML
 <!DOCTYPE html>
 <html>
-  <head>
-    <title rb="page_title">Sample title</title>
-  </head>
+<head>
+  <title rb="page_title">Sample title</title>
+</head>
 <body>
   <div rb:if="condition">
     Something conditional!
@@ -109,16 +118,6 @@ $doc = <<-HTML
 </body>
 </html>
 HTML
-
-$LOAD_PATH.unshift(File.expand_path("../lib", __FILE__))
-
-require 'rubygems'
-require 'isolate/now'
-require 'shaven'
-require 'erb'
-require 'haml'
-require 'mustache'
-require 'benchmark'
 
 $user = { 
   :name => "Marty Macfly", 
@@ -180,7 +179,7 @@ def render_mustache
   Mustache.render($mustache, { :user => $user, :items => $items, :title => $title, :condition => false})
 end
 
-n = 2000
+n = 1500
 
 Benchmark.bm do |x|
   x.report("Shaven  ") { n.times { render_shaven } }

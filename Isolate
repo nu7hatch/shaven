@@ -5,4 +5,8 @@ gem "nokogiri"
 env :development, :test do
   gem "rspec", "~> 2.5"
   gem "mocha", "~> 0.9"
+
+  # For benchmarks...
+  gem "mustache"
+  gem "haml"
 end
