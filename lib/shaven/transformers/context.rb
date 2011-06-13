@@ -22,14 +22,14 @@ module Shaven
     #     <div>marty@macf.ly</div>
     #   </div>
     #
-    class Hash < Base
+    class Context < Base
       def self.can_be_transformed?(value)
-        value.is_a?(::Hash) or value.is_a?(Presenter) or value.is_a?(Scope)
+        value.is_a?(::Hash)
       end
       
       def transform!
         value.stringify_keys
       end
-    end # Hash
+    end # Context
   end # Transformer
 end # Shaven

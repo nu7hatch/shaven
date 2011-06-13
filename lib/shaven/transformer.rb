@@ -5,7 +5,7 @@ module Shaven
     require "shaven/transformers/condition"
     require "shaven/transformers/reverse_condition"
     require "shaven/transformers/text_or_node"
-    require "shaven/transformers/hash"
+    require "shaven/transformers/context"
     require "shaven/transformers/list"
     require "shaven/transformers/auto"
 

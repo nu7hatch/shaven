@@ -24,7 +24,7 @@ module Shaven
     #
     class List < Base
       def self.can_be_transformed?(value)
-        value.respond_to?(:each)
+        value.is_a?(Array)
       end
 
       def transform!

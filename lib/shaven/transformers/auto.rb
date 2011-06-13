@@ -4,10 +4,10 @@ module Shaven
     # using specified settings. Regocnition is done by matching value type.
     class Auto < Base
       def self.new(name, value, scope)
-        if value.is_a?(::Array)
+        if Context.can_be_transformed?(value)
+          Context.new(name, value, scope)
+        elsif List.can_be_transformed?(value)
           List.new(name, value, scope)
-        elsif value.is_a?(::Hash)
-          Hash.new(name, value, scope)
         else
           TextOrNode.new(name, value, scope)
         end
