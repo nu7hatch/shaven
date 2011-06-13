@@ -2,7 +2,7 @@
 
 gem "nokogiri"
 
-env :development, :test do
+env :development do
   gem "rspec", "~> 2.5"
   gem "mocha", "~> 0.9"
 

@@ -51,19 +51,35 @@ module Shaven
     include Helpers::HTML
 
     class << self
-      # Generates new presenter with assigned given html code.
-      def feed(html)
-        new(Document.new(html))
+      def feed(tpl)
+        new(Document.new(tpl))
+      end
+
+      def render(tpl, context={})
+        feed(tpl).render(context)
       end
     end
 
+    attr_reader :scope
+
     def initialize(document)
       @document = document
+      @scope    = Scope.new(self)
     end
 
-    def to_html
-      Transformer.apply!(Scope.new(self).with(@document.root))
+    def render(context={})
+      unless compiled?
+        @scope.unshift(context.stringify_keys) unless context.empty?
+        Transformer.apply!(@scope.with(@document.root))
+        @compiled = true
+      end
+
       @document.to_html
+    end
+    alias_method :to_html, :render
+
+    def compiled?
+      !!@compiled
     end
 
     # Some tricks to make presenter acts as array :)

@@ -24,7 +24,8 @@ module Shaven
           value = scope[key]
           
           if value.is_a?(Proc) or value.is_a?(Method)
-            return value.call(*(value.arity == 1 ? [node] : []))
+            args = [node, self]
+            return value.call(*args.take(value.arity))
           else
             return value
           end
