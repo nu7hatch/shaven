@@ -73,8 +73,8 @@ This code produces following html:
       # If you add parameter to the presenter method, original node will
       # passed to it. Given element is an Nokogiri::XML::Node with some
       # extra helpers for content manipulation. 
-      def login_link(orig)
-        orig.update!(:method => "delete", :href => logout_path)
+      def login_link(node)
+        node.update!(:href => logout_path, :method => "delete")
       end
 
       # You can use extra html helpers to create new dom elements...
@@ -83,8 +83,8 @@ This code produces following html:
       end
  
       # ... or to replace current.
-      def title
-        tag(:h1, :id => "header") { "This is Sparta! "}.replace!
+      def title(node)
+        node.replace! { tag(:h1, :id => "header") { "This is Sparta! "} }
       end
     end
 
@@ -127,7 +127,7 @@ Now, the true power of Shaven. Suport for lists and scopes.
 
       def users_list
         [ { :name => tag(:strong) { "Emmet Brown" }, :email => "emmet@brown.com"},
-          { :name => proc { |orig| orig.update!(:class => "marty") { "Marty Macfly" }, :email => "marty@macfly.com" },
+          { :name => proc { |node| node.update!(:class => "marty") { "Marty Macfly" }, :email => "marty@macfly.com" },
           { :name => "Biff Tannen", :email => "biff@tannen.com" }
         ]
       end
@@ -181,3 +181,24 @@ And the awesome result is:
     </body>
     </html>
 
+### Conditionals
+
+    class ConditionalsPresenter < Shaven::Presenter
+      def true?
+        true
+      end
+
+      def false?
+        false
+      end
+    end
+
+    html = <<-HTML
+    <!DOCTYPE html>
+    <html>
+    <body>
+      <div rb:if="true?">Hello...</div>
+      <div rb:unless="false?">World!</div>
+    </body>
+    </html>
+    HTML
