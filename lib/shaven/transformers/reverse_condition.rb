@@ -1,5 +1,5 @@
 module Shaven
-  module Transformer
+  class Transformer
     # This transformer applies reverse conditional operations to nodes. It applies 
     # to all nodes containing <tt>rb:unless</tt> attribute.
     # 

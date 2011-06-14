@@ -1,5 +1,5 @@
 module Shaven
-  module Transformer
+  class Transformer
     # Its job is to automatically recognize which transformer should be applied
     # using specified settings. Regocnition is done by matching value type.
     class Auto < Base

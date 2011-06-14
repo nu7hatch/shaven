@@ -1,5 +1,5 @@
 module Shaven
-  module Transformer
+  class Transformer
     # This transformer Can be applied only when value is an instance of +Hash+,
     # <tt>Shaven::Scope</tt>, or <tt>Shaven::Preseneter</tt>. It doesn't modify
     # anything within given node, but modifies context for childrens.

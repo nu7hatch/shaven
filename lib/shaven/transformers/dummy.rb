@@ -1,5 +1,5 @@
 module Shaven
-  module Transformer
+  class Transformer
     # It removes all nodes containing <tt>rb:dummy</tt> attribute. It's very
     # usefull when your template contains lot of example items. Instead of deleting
     # them manualy you can mark them as dummy, so your designer can in the future

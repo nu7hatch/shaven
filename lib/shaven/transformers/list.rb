@@ -1,5 +1,5 @@
 module Shaven
-  module Transformer
+  class Transformer
     # This transformer can be applied when value can be iterated (responds to <tt>#each</tt>).
     # It treats given node as template so generates sequence of clones for each list value, 
     # and finally removes original node.
@@ -42,7 +42,7 @@ module Shaven
 
         node.remove
         array_scope = scope.dup.unshift(array_scope)
-        Transformer.apply!(array_scope.with(parent))
+        self.class.apply!(array_scope.with(parent))
         
         nil
       end

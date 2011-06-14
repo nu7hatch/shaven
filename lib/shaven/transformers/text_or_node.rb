@@ -1,5 +1,5 @@
 module Shaven
-  module Transformer
+  class Transformer
     # This transformers is applied to any kind of value which not applies to any 
     # other transformer. The only requirement is to node contains <tt>rb</tt> attribute.
     # If result is different than current node object then will be assigned as its 
