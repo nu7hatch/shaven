@@ -10,9 +10,9 @@ module Shaven
   require 'shaven/presenter'
   require 'shaven/version'
 
-  if defined?(Rails)
-    require 'shaven/railtie'
-  end
+  #if defined?(Rails)
+  #  require 'shaven/railtie'
+  #end
 
   # You can specify what caller attribute names should be used in your 
   # templates to define transformations. By default the html5 <tt>data-</tt>

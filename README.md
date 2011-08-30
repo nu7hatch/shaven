@@ -43,11 +43,11 @@ your templates. Ok, lets finish talking and take a look at examples...
     <!DOCTYPE html>
     <html>
     <head>
-      <title rb="title">Example title!</title>
+      <title data-fill="title">Example title!</title>
     </head>
     <body>
-      <h1 rb="title">Example title</h1>
-      <p rb="description">Example description...</p>
+      <h1 data-fill="title">Example title</h1>
+      <p data-fill="description">Example description...</p>
     </body>
     </html>
     HTML
@@ -93,8 +93,8 @@ This code produces following html:
     <html>
     <body>
       <div rb="title">Example title</div>
-      <a href="#" rb="logout_link">Logout!</a>
-      <div rb="home_page_link">Home page link will go here...</div>
+      <a href="#" data-fill="logout_link">Logout!</a>
+      <div data-fill="home_page_link">Home page link will go here...</div>
     </body>
     </html>
     HTML
@@ -138,15 +138,15 @@ Now, the true power of Shaven. Suport for lists and scopes.
     <html>
     <body>
       <h1>Single user here!</h1>
-      <div rb="user">
-        <h2 rb="name">Sample name</h2>
-        <p rb="email">sapmle@email.com</p>
+      <div data-fill="user">
+        <h2 data-fill="name">Sample name</h2>
+        <p data-fill="email">sapmle@email.com</p>
       </div>
       <h1>More users</h1>
       <ul id="users">
-        <li rb="users_list">
-          <span rb="name">Sample name</span>
-          <span rb="email">sample@email.com</span>
+        <li data-fill="users_list">
+          <span data-fill="name">Sample name</span>
+          <span data-fill="email">sample@email.com</span>
         <li>
       </ul>
     </body>
@@ -159,7 +159,7 @@ And the awesome result is:
     <html>
     <body>
       <h1>Single user here!</h1>
-      <div rb="user">
+      <div data-fill="user">
         <h2>Adam Smith</h2>
         <p>adam@smith.com</p>
       </div>
@@ -197,8 +197,29 @@ And the awesome result is:
     <!DOCTYPE html>
     <html>
     <body>
-      <div rb:if="true?">Hello...</div>
-      <div rb:unless="false?">World!</div>
+      <div data-if="true?">Hello...</div>
+      <div data-unless="false?">World!</div>
     </body>
     </html>
     HTML
+
+### Dummy elements
+
+    html = <<-HTML
+    <!DOCTYPE html>
+    <html>
+    <body>
+      <h1>Hello dummies!</h1>
+      <div data-dummy="yes">This is dummy text!</div>
+    </body>
+    </html>
+    HTML
+    
+produces:
+
+    <!DOCTYPE html>
+    <html>
+    <body>
+      <h1>Hello dummies!</h1>
+    </body>
+    </html>    
