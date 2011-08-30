@@ -94,25 +94,25 @@ $doc = <<-HTML
 <!DOCTYPE html>
 <html>
 <head>
-  <title rb="page_title">Sample title</title>
+  <title data-fill="page_title">Sample title</title>
 </head>
 <body>
-  <div rb:if="condition">
+  <div data-if="condition">
     Something conditional!
   </div>
-  <div rb:unless="condition">
+  <div data-unless="condition">
     Something else
   </div>
 
-  <div rb="user">
-    <div rb="name">Name</div>
-    <div rb="email">email@mail.com</div>
+  <div data-fill="user">
+    <div data-fill="name">Name</div>
+    <div data-fill="email">email@mail.com</div>
   </div>
 
   <ul id="items">
-    <li rb="items">
-      <div rb="name">Foobar</div>
-      <div rb="price">$250</div>
+    <li data-fill="items">
+      <div data-fill="name">Foobar</div>
+      <div data-fill="price">$250</div>
     </li>
   </ul>
 </body>
@@ -179,11 +179,11 @@ def render_mustache
   Mustache.render($mustache, { :user => $user, :items => $items, :title => $title, :condition => false})
 end
 
-n = 1500
+n = 3000
 
 Benchmark.bm do |x|
   x.report("Shaven  ") { n.times { render_shaven } }
-  x.report("Mustache") { n.times { render_mustache } }
   x.report("ERB     ") { n.times { render_erb } }
+  x.report("Mustache") { n.times { render_mustache } }
   x.report("HAML    ") { n.times { render_haml } }
 end
