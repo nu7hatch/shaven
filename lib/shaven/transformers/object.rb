@@ -1,8 +1,8 @@
 module Shaven
   class Transformer
-    # This transformer Can be applied only when value is an instance of +Hash+,
-    # <tt>Shaven::Scope</tt>, or <tt>Shaven::Preseneter</tt>. It doesn't modify
-    # anything within given node, but modifies context for childrens.
+    # This transformer Can be applied only when value is an instance of shaven
+    # accessible `Object`, It doesn't modify anything within given node, but 
+    # modifies context for childrens.
     #
     # ==== Example
     #
@@ -11,9 +11,17 @@ module Shaven
     #     <div data-fill="email">email@example.com</div>
     #   </div>
     #
-    # applied with given value:
-    #
-    #   { :name => "Marty Macfly", :email => "marty@macf.ly" }
+    # applied with given object instance:
+    #  
+    #   class Marty
+    #     def name
+    #       "Marty Macfly"
+    #     end
+    #   
+    #     def email
+    #       "marty@macf.ly"
+    #     end
+    #   end
     #
     # ... generates:
     #
