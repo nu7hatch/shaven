@@ -7,11 +7,13 @@ module Shaven
     # 
     # ==== Example
     #
-    #    <div rb:unless="logged_in?">
-    #      <a href="#" rb="login_link">Login to your account!</a>
+    #    <div data-unless="logged_in?">
+    #      <a href="#" data-fill="login_link">Login to your account!</a>
     #    </div>
     #
-    class ReverseCondition < Base
+    class ReverseCondition < Transformer
+      self.caller_key = 'unless'
+
       def allow_continue?
         !value
       end

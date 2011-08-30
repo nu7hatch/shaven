@@ -1,5 +1,13 @@
 require File.dirname(__FILE__) + "/../spec_helper"
 
+class Foobar
+  shaven_accessible!
+  
+  def foo
+    "bar"
+  end
+end
+
 describe Shaven::Transformer::Auto do
   subject do 
     Shaven::Transformer::Auto 
@@ -20,7 +28,14 @@ describe Shaven::Transformer::Auto do
     context "when value is an hash" do
       it "returns context transformer object" do
         t = Shaven::Transformer::Auto.new("value", {:foo => "bar"}, Shaven::Scope.new({}))
-        t.should be_kind_of(Shaven::Transformer::Context)
+        t.should be_kind_of(Shaven::Transformer::Hash)
+      end
+    end
+
+    context "when value is an shaven accessible object" do
+      it "returns context transformer object" do
+        t = Shaven::Transformer::Auto.new("value", Foobar.new, Shaven::Scope.new({}))
+        t.should be_kind_of(Shaven::Transformer::Object)
       end
     end
 

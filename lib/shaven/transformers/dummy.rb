@@ -8,12 +8,14 @@ module Shaven
     # ==== Example
     # 
     #   <ul id="emperors">
-    #     <li rb="emperors">Karol the Great</li>
-    #     <li rb:dummy="yes">Julius Cesar</li>
-    #     <li rb:dummy="yes">Alexander the Great</li>
+    #     <li data-fill="emperors">Karol the Great</li>
+    #     <li data-dummy="yes">Julius Cesar</li>
+    #     <li data-dummy="yes">Alexander the Great</li>
     #   <ul>
     # 
-    class Dummy < Base
+    class Dummy < Transformer
+      self.caller_key = 'dummy'
+
       def transform!
         node.remove
       end

@@ -7,8 +7,8 @@ module Shaven
     #
     # === Example
     #
-    #   <h1 rb="title">Example</h1>
-    #   <p rb="description">Lorem ipsum dolor...</p>
+    #   <h1 data-fill="title">Example</h1>
+    #   <p data-fill="description">Lorem ipsum dolor...</p>
     #
     # with given presenter:
     #
@@ -27,7 +27,7 @@ module Shaven
     #   <h1>Hello world!</h1>
     #   <p id="description">World is beautiful!</p>
     #
-    class TextOrNode < Base
+    class TextOrNode < Transformer
       def transform!
         if value.nokogiri_node?
           node.inner_html = value unless value === node

@@ -6,9 +6,9 @@ module Shaven
     #
     # ==== Example
     #
-    #   <div rb="user">
-    #     <div rb="name">John Doe</div>
-    #     <div rb="email">email@example.com</div>
+    #   <div data-fill="user">
+    #     <div data-fill="name">John Doe</div>
+    #     <div data-fill="email">email@example.com</div>
     #   </div>
     #
     # applied with given value:
@@ -22,13 +22,13 @@ module Shaven
     #     <div>marty@macf.ly</div>
     #   </div>
     #
-    class Context < Base
+    class Object < Transformer
       def self.can_be_transformed?(value)
-        value.is_a?(::Hash)
+        value.shaven_accessible?
       end
       
       def transform!
-        value.stringify_keys
+        value
       end
     end # Context
   end # Transformer

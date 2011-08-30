@@ -7,11 +7,13 @@ module Shaven
     # 
     # ==== Example
     #
-    #    <div rb:if="logged_in?">
-    #      Hello <span rb="user_name">John Doe</span>!
+    #    <div data-if="logged_in?">
+    #      Hello <span data-fill="user_name">John Doe</span>!
     #    </div>
     #
-    class Condition < Base
+    class Condition < Transformer
+      self.caller_key = 'if'
+
       def allow_continue?
         !!value
       end

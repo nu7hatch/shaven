@@ -47,7 +47,7 @@ describe Shaven::Presenter do
     end
 
     it "creates new a element without arguments when not given" do
-      a = subject.a { "Hello!"} 
+      a = subject.a { "Hello!" } 
       a.to_html.should == '<a>Hello!</a>'
     end
   end

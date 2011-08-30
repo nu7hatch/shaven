@@ -19,8 +19,10 @@ module Shaven
     end
 
     def [](key)
+      key = key.to_s
+
       each { |scope|
-        if scope.key?(key = key.to_s) 
+        if scope.key?(key) 
           value = scope[key]
           
           if value.is_a?(Proc) or value.is_a?(Method)

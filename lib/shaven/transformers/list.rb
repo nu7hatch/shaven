@@ -7,7 +7,7 @@ module Shaven
     # ==== Example
     #
     #   <ul id="users">
-    #     <li rb="users">John Doe</li>
+    #     <li data-fill="users">John Doe</li>
     #   </ul>
     #
     # applied with given value:
@@ -22,9 +22,9 @@ module Shaven
     #     <li>Biff Tannen</li>
     #   </ul>
     #
-    class List < Base
+    class List < Transformer
       def self.can_be_transformed?(value)
-        value.is_a?(Array)
+        value.respond_to?(:each_index)
       end
 
       def transform!
@@ -35,7 +35,7 @@ module Shaven
         value.each { |item|
           new_node = node.dup
           array_scope["__shaven_list_item_#{id}"] = item
-          new_node['rb'] = "__shaven_list_item_#{id}"
+          new_node[Shaven.caller_key_prefix + Auto.caller_key] = "__shaven_list_item_#{id}"
           parent.add_child(new_node)
           id += 1
         }

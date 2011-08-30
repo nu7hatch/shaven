@@ -14,14 +14,14 @@ module Shaven
     require 'shaven/railtie'
   end
 
-  class << self
-    # You can specify what caller attribute names should be used in your 
-    # templates to define transformations. By default <tt>rb</tt>/<tt>rb:*</tt>
-    # attributes are in use. 
-    attr_writer :caller_key
+  # You can specify what caller attribute names should be used in your 
+  # templates to define transformations. By default the html5 <tt>data-</tt>
+  # attributes are in use. 
+  def self.caller_key_prefix=(key)
+    @caller_key = key
+  end
     
-    def caller_key
-      @template_key ||= 'rb'
-    end
-  end # self
+  def self.caller_key_prefix
+    @caller_key ||= 'data-'
+  end
 end # Shaven
