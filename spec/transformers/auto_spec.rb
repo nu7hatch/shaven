@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + "/../spec_helper"
 
 class Foobar
-  shaven_accessible!
+  include Shaven::Accessible
   
   def foo
     "bar"

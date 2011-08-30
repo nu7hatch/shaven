@@ -3,7 +3,7 @@
 * HTML's data-* attributes use as callers by default
 * Context transformer splitted into Object and Hash transformers
 * Optimized transformation distinguising
-* Added shaven accessible objects recognition
+* Added shaven accessible objects recognition and accessibility mixin
 * Minor bugfixes
 
 # 0.0.1 (Proof of concept)

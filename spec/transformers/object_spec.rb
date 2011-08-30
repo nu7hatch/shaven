@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + "/../spec_helper"
 
 class BiffObject
-  shaven_accessible!
+  include Shaven::Accessible
 
   def name
     "Biff Tannen"

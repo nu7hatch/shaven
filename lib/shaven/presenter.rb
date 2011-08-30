@@ -49,22 +49,21 @@ module Shaven
   #
   class Presenter
     include Helpers::HTML
+    include AccessibleState
 
-    class << self
-      def feed(tpl)
-        new(Document.new(tpl))
-      end
-
-      def render(tpl, context={})
-        feed(tpl).render(context)
-      end
+    def self.feed(tpl)
+      new(Document.new(tpl))
+    end
+    
+    def self.render(tpl, context={})
+      feed(tpl).render(context)
     end
 
     attr_reader :scope
 
     def initialize(document)
       @document = document
-      @scope    = Scope.new(self)
+      @scope = Scope.new(self)
     end
 
     def render(context={})
@@ -82,7 +81,7 @@ module Shaven
       !!@compiled
     end
 
-    # Some tricks to make presenter acts as array :)
+    # Tricks to make this presenter an shaven accessible object...
 
     alias_method :key?, :respond_to?
     alias_method :[], :method
