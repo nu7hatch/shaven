@@ -61,5 +61,12 @@ describe Shaven::Transformer::TextOrNode do
         p.should == "<!DOCTYPE html>\n<html><body>\n<h1>Hello World!</h1>\n</body></html>\n"
       end
     end
+
+    context "when item not found" do
+      it "deletes element" do
+        p = render("text_or_node.html", Hash)
+        p.should == "<!DOCTYPE html>\n<html><body>\n\n</body></html>\n"
+      end
+    end
   end
 end

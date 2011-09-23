@@ -31,10 +31,12 @@ module Shaven
       def transform!
         if value.nokogiri_node?
           node.inner_html = value unless value === node
-        else
+        elsif value
           node.content = value.to_s
+        else
+          node.remove
         end
-        
+
         nil
       end
     end # TextOrNode

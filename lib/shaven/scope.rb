@@ -22,7 +22,7 @@ module Shaven
       key = key.to_s
 
       each { |scope|
-        if scope.key?(key) 
+        if scope.key?(key)
           value = scope[key]
           
           if value.is_a?(Proc) or value.is_a?(Method)
@@ -33,6 +33,8 @@ module Shaven
           end
         end
       }
+
+      nil
     end
 
     # Assigns given DOM node to this context and returns itself. This method will
