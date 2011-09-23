@@ -21,8 +21,8 @@ describe Shaven::Transformer::Condition do
   
   describe "transform!" do
     it "removes given node when condition is false" do
-      p = make_presenter("condition.html", ConditionPresenter)
-      p.to_html.should == "<!DOCTYPE html>\n<html><body>\n\n<div>This should appear!</div>\n</body></html>\n"
+      p = render("condition.html", ConditionPresenter)
+      p.should == "<!DOCTYPE html>\n<html><body>\n\n<div>This should appear!</div>\n</body></html>\n"
     end
   end
 end

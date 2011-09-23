@@ -30,8 +30,8 @@ describe Shaven::Transformer::Object do
   
   describe "transform!" do
     it "scopes given object as subcontext if it's shaven accessible" do
-      p = make_presenter("context.html", ObjectPresenter)
-      p.to_html.should == "<!DOCTYPE html>\n<html><body>\n<div>\n<h2>Biff Tannen</h2>\n<p>biff@tannen.com</p>\n</div>\n</body></html>\n"
+      p = render("context.html", ObjectPresenter)
+      p.should == "<!DOCTYPE html>\n<html><body>\n<div>\n<h2>Biff Tannen</h2>\n<p>biff@tannen.com</p>\n</div>\n</body></html>\n"
     end
   end
 end

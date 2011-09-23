@@ -164,7 +164,7 @@ class ErbView
 end
 
 def render_shaven
-  MyPresenter.feed($doc).to_html
+  Shaven::Template.new($doc).to_html(MyPresenter.new)
 end
 
 def render_erb

@@ -8,7 +8,7 @@ module Shaven
   require 'shaven/accessible'
   require 'shaven/core_ext/object'
   require 'shaven/nokogiri_ext/node'
-  require 'shaven/presenter'
+  require 'shaven/template'
   require 'shaven/version'
 
   #if defined?(Rails)

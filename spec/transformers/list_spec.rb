@@ -27,14 +27,14 @@ describe Shaven::Transformer::List do
   
   describe "transform!" do
     it "generates sequence based on current node and fills it in with list values" do
-      p = make_presenter("list.html", ListPresenter)
-      p.to_html.should == "<!DOCTYPE html>\n<html><body>\n<ul>\n<li>Emmet Brown</li>\n<li>Marty Macfly</li>\n<li>Biff Tannen</li>\n</ul>\n</body></html>\n"
+      p = render("list.html", ListPresenter)
+      p.should == "<!DOCTYPE html>\n<html><body>\n<ul>\n<li>Emmet Brown</li>\n<li>Marty Macfly</li>\n<li>Biff Tannen</li>\n</ul>\n</body></html>\n"
     end
 
     context "when list of hashes given" do
       it "generates sequence based on current node and scopes list items as subcontexts" do
-        p = make_presenter("list_of_contexts.html", ListOfContextsPresenter)
-        p.to_html.should == "<!DOCTYPE html>\n<html><body>\n<ul>\n<li>Emmet Brown</li>\n<li><strong>Marty Macfly</strong></li>\n<li><strong>Biff Tannen</strong></li>\n</ul>\n</body></html>\n"
+        p = render("list_of_contexts.html", ListOfContextsPresenter)
+        p.should == "<!DOCTYPE html>\n<html><body>\n<ul>\n<li>Emmet Brown</li>\n<li><strong>Marty Macfly</strong></li>\n<li><strong>Biff Tannen</strong></li>\n</ul>\n</body></html>\n"
       end
     end
   end

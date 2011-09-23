@@ -11,8 +11,8 @@ describe Shaven::Transformer::Dummy do
   
   describe "transform!" do
     it "removes given node" do
-      p = make_presenter("dummy.html")
-      p.to_html.should == "<!DOCTYPE html>\n<html><body>\n\n</body></html>\n"
+      p = render("dummy.html")
+      p.should == "<!DOCTYPE html>\n<html><body>\n\n</body></html>\n"
     end
   end
 end

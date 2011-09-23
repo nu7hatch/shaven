@@ -2,7 +2,9 @@ require File.dirname(__FILE__) + "/spec_helper"
 
 describe Shaven::Presenter do
   subject do
-    Shaven::Presenter.feed("<html><body></body></html>")
+    p = Shaven::Presenter.new
+    p.feed("<html><body></body></html>")
+    p
   end
 
   describe "#tag" do

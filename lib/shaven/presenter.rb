@@ -51,34 +51,8 @@ module Shaven
     include Helpers::HTML
     include AccessibleState
 
-    def self.feed(tpl)
-      new(Document.new(tpl))
-    end
-    
-    def self.render(tpl, context={})
-      feed(tpl).render(context)
-    end
-
-    attr_reader :scope
-
-    def initialize(document)
-      @document = document
-      @scope = Scope.new(self)
-    end
-
-    def render(context={})
-      unless compiled?
-        @scope.unshift(context.stringify_keys) unless context.empty?
-        Transformer.apply!(@scope.with(@document.root))
-        @compiled = true
-      end
-
-      @document.to_html
-    end
-    alias_method :to_html, :render
-
-    def compiled?
-      !!@compiled
+    def feed(doc)
+      @document = doc.is_a?(Nokogiri::XML::Document) ? doc : Document.new(doc)
     end
 
     # Tricks to make this presenter an shaven accessible object...

@@ -21,8 +21,8 @@ describe Shaven::Transformer::ReverseCondition do
   
   describe "transform!" do
     it "removes given node when condition is true" do
-      p = make_presenter("reverse_condition.html", ReverseConditionPresenter)
-      p.to_html.should == "<!DOCTYPE html>\n<html><body>\n\n<div>This should appear!</div>\n</body></html>\n"
+      p = render("reverse_condition.html", ReverseConditionPresenter)
+      p.should == "<!DOCTYPE html>\n<html><body>\n\n<div>This should appear!</div>\n</body></html>\n"
     end
   end
 end

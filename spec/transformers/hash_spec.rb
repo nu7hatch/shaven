@@ -18,8 +18,8 @@ describe Shaven::Transformer::Hash do
   
   describe "transform!" do
     it "scopes given hash value as subcontext" do
-      p = make_presenter("context.html", HashPresenter)
-      p.to_html.should == "<!DOCTYPE html>\n<html><body>\n<div>\n<h2>Marty Macfly</h2>\n<p>marty@macfly.com</p>\n</div>\n</body></html>\n"
+      p = render("context.html", HashPresenter)
+      p.should == "<!DOCTYPE html>\n<html><body>\n<div>\n<h2>Marty Macfly</h2>\n<p>marty@macfly.com</p>\n</div>\n</body></html>\n"
     end
   end
 end
