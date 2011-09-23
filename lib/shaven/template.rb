@@ -6,10 +6,10 @@ module Shaven
       @document = Document.new(html)
     end
 
-    def render(context={})
+    def render(context, locals={})
       unless compiled?
         context.feed(@document) if context.is_a?(Shaven::Presenter)
-        Transformer.apply!(Scope.new(context).with(@document.root))
+        Transformer.apply!(Scope.new(locals, context).with(@document.root))
         @compiled = true
       end
       @document.to_html
